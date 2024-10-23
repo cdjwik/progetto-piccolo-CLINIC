@@ -1,0 +1,66 @@
+classDiagram
+    class Report {
+        -Date reportDate
+        -Clinic clinic
+        -List~DrugCost~ drugCosts
+        -double totalCost
+        +generateMonthlyReport()
+        +calculateTotalCost()
+        +exportReport()
+    }
+
+    class DrugCost {
+        -Drug drug
+        -int totalPrescriptions
+        -int totalDoses
+        -double costPerDose
+        -double totalCost
+        +calculateCost()
+    }
+
+    class Clinic {
+        -String clinicId
+        -String name
+        -String address
+        -List~Prescription~ prescriptions
+        +getPrescriptionsForMonth()
+    }
+
+    class Drug {
+        -String drugId
+        -String name
+        -double costPerUnit
+        -String unit
+        +getCost()
+    }
+
+    class Prescription {
+        -String prescriptionId
+        -Date prescriptionDate
+        -int doses
+        -Drug drug
+        -Clinic clinic
+        +calculateTotalCost()
+    }
+
+    class AccessControl {
+        -List~User~ authorizedUsers
+        +checkAccess(User)
+        +grantAccess(User)
+        +revokeAccess(User)
+    }
+
+    class User {
+        -String userId
+        -String role
+        -List~Permission~ permissions
+        +hasAccessTo(Report)
+    }
+
+    Report -- DrugCost : contiene
+    Report -- Clinic : appartiene a
+    DrugCost -- Drug : riferisce a
+    Clinic -- Prescription : emette
+    Prescription -- Drug : prescrive
+    AccessControl -- User : gestisce
+    Report -- AccessControl : protetto da
